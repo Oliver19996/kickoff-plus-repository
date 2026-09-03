@@ -4,9 +4,11 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
 from app.db import get_db
+from app.config import get_settings
 from app.leagues import CATEGORY_LABELS, LEAGUES
 from app.models import Article, Match, MetaState, Standing, WeekendPick
 from app.services.classify import heat_label
+from app.services.ingest import ingest_all
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
@@ -35,6 +37,11 @@ def render(request: Request, name: str, context: dict):
 
 @router.get("/", response_class=HTMLResponse)
 def home(request: Request, db: Session = Depends(get_db)):
+    if get_settings().ingest_on_request:
+        try:
+            ingest_all()
+        except Exception:
+            pass
     articles = db.query(Article).order_by(Article.published_at.desc()).limit(40).all()
     hero = articles[0] if articles else None
     by_cat = {

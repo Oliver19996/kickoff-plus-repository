@@ -1,4 +1,5 @@
 from pathlib import Path
+from types import SimpleNamespace
 
 from fastapi.testclient import TestClient
 
@@ -52,3 +53,17 @@ def test_sample_football_and_pages(tmp_path, monkeypatch):
     assert ok.status_code == 200
     robots = client.get("/robots.txt")
     assert "Disallow: /internal/" in robots.text
+
+
+def test_home_ingests_on_request(monkeypatch):
+    from app.routers import pages
+
+    calls = []
+    monkeypatch.setattr(pages, "get_settings", lambda: SimpleNamespace(ingest_on_request=True))
+    monkeypatch.setattr(pages, "ingest_all", lambda: calls.append(True))
+
+    from app.main import app
+
+    response = TestClient(app).get("/")
+    assert response.status_code == 200
+    assert calls == [True]

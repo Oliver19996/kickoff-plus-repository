@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     app_base_url: str = "http://127.0.0.1:8000"
     database_url: str = "sqlite:///./data/kickoff.sqlite3"
     ingest_on_startup: bool = True
+    ingest_on_request: bool = True
     start_scheduler: bool = True
 
 
