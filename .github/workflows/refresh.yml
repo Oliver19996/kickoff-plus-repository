@@ -1,0 +1,21 @@
+name: Refresh Kickoff Pulse
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping ingest endpoint
+        env:
+          APP_BASE_URL: ${{ secrets.APP_BASE_URL }}
+          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+        run: |
+          if [ -z "$APP_BASE_URL" ] || [ -z "$REFRESH_TOKEN" ]; then
+            echo "APP_BASE_URL and REFRESH_TOKEN secrets are required"
+            exit 0
+          fi
+          curl -fsS -X POST "$APP_BASE_URL/internal/refresh" \
+            -H "X-Refresh-Token: $REFRESH_TOKEN"

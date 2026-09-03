@@ -1,0 +1,1 @@
+"""Kickoff Pulse web application."""

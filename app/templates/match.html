@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}{{ match.home_team }} vs {{ match.away_team }} | Kickoff Pulse{% endblock %}
+{% block content %}
+<section class="overflow-hidden rounded-3xl bg-card ring-1 ring-line">
+  <div class="h-48 bg-gradient-to-r from-slate-700 via-indigo-800 to-zinc-900"></div>
+  <div class="p-8 text-center">
+    <p class="text-xs uppercase tracking-[0.2em] text-zinc-400">{{ league.name if league else match.league_slug }} · {{ match.utc_date[:16] }}</p>
+    <div class="mt-6 grid grid-cols-3 items-center gap-4">
+      <h1 class="font-display text-2xl md:text-3xl">{{ match.home_team }}</h1>
+      <p class="font-display text-5xl">
+        {% if match.home_score is not none %}{{ match.home_score }} — {{ match.away_score }}{% else %}vs{% endif %}
+      </p>
+      <h1 class="font-display text-2xl md:text-3xl">{{ match.away_team }}</h1>
+    </div>
+    {% if match.highlight %}
+    <p class="mx-auto mt-6 max-w-2xl text-zinc-300">{{ match.highlight }}</p>
+    {% endif %}
+  </div>
+</section>
+
+<section class="mt-10">
+  <h2 class="mb-4 font-display text-2xl">関連記事</h2>
+  <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    {% for article in related %}
+    <a href="{{ article.url }}" target="_blank" rel="nofollow noopener" class="overflow-hidden rounded-2xl bg-card ring-1 ring-line">
+      <img src="{{ article_image(article) }}" alt="" class="h-36 w-full object-cover" />
+      <div class="p-3">
+        <h3 class="text-sm">{{ article.title }}</h3>
+        <p class="mt-1 text-xs text-zinc-400">{{ article.source }}</p>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

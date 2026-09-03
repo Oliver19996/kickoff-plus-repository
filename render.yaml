@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: kickoff-pulse
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: FOOTBALL_DATA_TOKEN
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: REFRESH_TOKEN
+        generateValue: true
+      - key: APP_BASE_URL
+        sync: false
+      - key: DATABASE_URL
+        value: sqlite:///./data/kickoff.sqlite3

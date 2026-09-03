@@ -1,0 +1,32 @@
+:root {
+  color-scheme: dark;
+}
+
+body {
+  background:
+    radial-gradient(1200px 500px at 10% -10%, rgba(61, 98, 245, 0.18), transparent 50%),
+    radial-gradient(900px 400px at 90% 0%, rgba(225, 6, 0, 0.12), transparent 45%),
+    #0b0d12;
+}
+
+a:hover {
+  color: #fde68a;
+}
+
+.hero-overlay {
+  background: linear-gradient(to top, rgba(11, 13, 18, 0.95), rgba(11, 13, 18, 0.15));
+}
+
+.rumor-badge {
+  display: inline-block;
+  border-radius: 999px;
+  background: #7a1f1f;
+  padding: 0.15rem 0.55rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+img {
+  background: #1b2030;
+}

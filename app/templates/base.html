@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}Kickoff Pulse{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: "#0b0d12",
+            card: "#151821",
+            line: "#2a3140"
+          },
+          fontFamily: {
+            display: ["Georgia", "Times New Roman", "serif"],
+            sans: ["ui-sans-serif", "system-ui", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="/static/css/app.css" />
+</head>
+<body class="bg-ink text-zinc-100">
+  <header class="sticky top-0 z-20 border-b border-line bg-ink/90 backdrop-blur">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
+      <a href="/" class="font-display text-2xl tracking-tight">Kickoff Pulse</a>
+      <nav class="flex flex-wrap gap-3 text-sm text-zinc-300">
+        <a href="/leagues/pl">EPL</a>
+        <a href="/leagues/laliga">LaLiga</a>
+        <a href="/leagues/bundesliga">Bundesliga</a>
+        <a href="/leagues/j1">Jリーグ</a>
+        <a href="/transfers">移籍</a>
+        <a href="/gossip">ゴシップ</a>
+        <a href="/deep-dives">深掘り</a>
+      </nav>
+    </div>
+  </header>
+  <main class="mx-auto max-w-7xl px-4 py-6">
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="border-t border-line px-4 py-8 text-xs text-zinc-500">
+    <div class="mx-auto max-w-7xl space-y-2">
+      <p>最終更新: {{ last_ingest }} ・ 15分ごとのダイジェスト（ライブスコアではありません）</p>
+      <p>記事は見出し・要約・出典リンクのみ。本文の転載はしません。ゴシップは Rumor ラベル付きです。</p>
+    </div>
+  </footer>
+</body>
+</html>

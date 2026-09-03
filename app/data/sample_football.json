@@ -1,0 +1,37 @@
+{
+  "standings": {
+    "pl": [
+      {"position": 1, "team_name": "Liverpool FC", "team_crest": "", "played": 4, "won": 4, "draw": 0, "lost": 0, "points": 12, "goal_diff": 7},
+      {"position": 2, "team_name": "Arsenal FC", "team_crest": "", "played": 4, "won": 3, "draw": 1, "lost": 0, "points": 10, "goal_diff": 6},
+      {"position": 3, "team_name": "Manchester City FC", "team_crest": "", "played": 4, "won": 3, "draw": 0, "lost": 1, "points": 9, "goal_diff": 5},
+      {"position": 4, "team_name": "Chelsea FC", "team_crest": "", "played": 4, "won": 2, "draw": 2, "lost": 0, "points": 8, "goal_diff": 3},
+      {"position": 5, "team_name": "Tottenham Hotspur FC", "team_crest": "", "played": 4, "won": 2, "draw": 1, "lost": 1, "points": 7, "goal_diff": 2}
+    ],
+    "laliga": [
+      {"position": 1, "team_name": "FC Barcelona", "team_crest": "", "played": 4, "won": 4, "draw": 0, "lost": 0, "points": 12, "goal_diff": 10},
+      {"position": 2, "team_name": "Real Madrid CF", "team_crest": "", "played": 4, "won": 3, "draw": 1, "lost": 0, "points": 10, "goal_diff": 6},
+      {"position": 3, "team_name": "Atlético de Madrid", "team_crest": "", "played": 4, "won": 2, "draw": 2, "lost": 0, "points": 8, "goal_diff": 4},
+      {"position": 4, "team_name": "Athletic Club", "team_crest": "", "played": 4, "won": 2, "draw": 1, "lost": 1, "points": 7, "goal_diff": 2}
+    ],
+    "bundesliga": [
+      {"position": 1, "team_name": "FC Bayern München", "team_crest": "", "played": 3, "won": 3, "draw": 0, "lost": 0, "points": 9, "goal_diff": 8},
+      {"position": 2, "team_name": "Bayer 04 Leverkusen", "team_crest": "", "played": 3, "won": 2, "draw": 1, "lost": 0, "points": 7, "goal_diff": 4},
+      {"position": 3, "team_name": "Borussia Dortmund", "team_crest": "", "played": 3, "won": 2, "draw": 0, "lost": 1, "points": 6, "goal_diff": 3},
+      {"position": 4, "team_name": "RB Leipzig", "team_crest": "", "played": 3, "won": 2, "draw": 0, "lost": 1, "points": 6, "goal_diff": 2}
+    ]
+  },
+  "matches": {
+    "pl": [
+      {"id": 401001, "utc_date": "2026-08-30T16:30:00Z", "status": "FINISHED", "home_team": "Liverpool FC", "away_team": "Arsenal FC", "home_score": 2, "away_score": 1, "matchday": 3},
+      {"id": 401002, "utc_date": "2026-09-06T14:00:00Z", "status": "TIMED", "home_team": "Manchester City FC", "away_team": "Chelsea FC", "home_score": null, "away_score": null, "matchday": 4}
+    ],
+    "laliga": [
+      {"id": 402001, "utc_date": "2026-08-31T19:00:00Z", "status": "FINISHED", "home_team": "FC Barcelona", "away_team": "Real Madrid CF", "home_score": 3, "away_score": 2, "matchday": 3},
+      {"id": 402002, "utc_date": "2026-09-07T19:00:00Z", "status": "SCHEDULED", "home_team": "Atlético de Madrid", "away_team": "Athletic Club", "home_score": null, "away_score": null, "matchday": 4}
+    ],
+    "bundesliga": [
+      {"id": 403001, "utc_date": "2026-08-29T16:30:00Z", "status": "FINISHED", "home_team": "FC Bayern München", "away_team": "Borussia Dortmund", "home_score": 4, "away_score": 1, "matchday": 2},
+      {"id": 403002, "utc_date": "2026-09-05T13:30:00Z", "status": "TIMED", "home_team": "Bayer 04 Leverkusen", "away_team": "RB Leipzig", "home_score": null, "away_score": null, "matchday": 3}
+    ]
+  }
+}

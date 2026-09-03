@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}{{ league.name }} | Kickoff Pulse{% endblock %}
+{% block content %}
+<section class="mb-8 overflow-hidden rounded-3xl" style="background: linear-gradient(120deg, {{ league.accent }}, #0b0d12);">
+  <div class="flex min-h-[220px] items-end p-8">
+    <div>
+      <p class="text-xs uppercase tracking-[0.25em]">{{ league.region }}</p>
+      <h1 class="font-display text-5xl">{{ league.name }}</h1>
+    </div>
+  </div>
+</section>
+
+{% if league.slug == "j1" %}
+<p class="mb-6 text-sm text-zinc-400">Jリーグの順位表は football-data.org 無料枠に含まれません。試合情報はRSS見出しを中心に掲載します。</p>
+{% endif %}
+
+<div class="grid gap-8 lg:grid-cols-5">
+  <section class="lg:col-span-2">
+    <h2 class="mb-3 font-display text-2xl">順位表</h2>
+    {% if standings %}
+    <table class="w-full text-sm">
+      <thead class="text-zinc-400">
+        <tr><th class="py-2 text-left">#</th><th class="text-left">クラブ</th><th>P</th><th>Pts</th><th>GD</th></tr>
+      </thead>
+      <tbody>
+        {% for row in standings %}
+        <tr class="border-t border-line">
+          <td class="py-2">{{ row.position }}</td>
+          <td>{{ row.team_name }}</td>
+          <td class="text-center">{{ row.played }}</td>
+          <td class="text-center">{{ row.points }}</td>
+          <td class="text-center">{{ row.goal_diff }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="text-zinc-500">順位データはまだありません。</p>
+    {% endif %}
+  </section>
+  <section class="lg:col-span-3">
+    <h2 class="mb-3 font-display text-2xl">直近のカード</h2>
+    <div class="grid gap-3 sm:grid-cols-2">
+      {% for match in matches %}
+      <a href="/matches/{{ match.id }}" class="rounded-2xl bg-card p-4 ring-1 ring-line">
+        <p class="text-xs text-zinc-400">{{ match.utc_date[:10] }} · {{ match.status }}</p>
+        <p class="mt-2">{{ match.home_team }}</p>
+        <p class="font-display text-2xl">
+          {% if match.home_score is not none %}{{ match.home_score }} — {{ match.away_score }}{% else %}vs{% endif %}
+        </p>
+        <p>{{ match.away_team }}</p>
+      </a>
+      {% else %}
+      <p class="text-zinc-500">試合データはまだありません。</p>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+
+<section class="mt-10">
+  <h2 class="mb-4 font-display text-2xl">このリーグの記事</h2>
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    {% for article in news %}
+    <a href="{{ article.url }}" target="_blank" rel="nofollow noopener" class="overflow-hidden rounded-2xl bg-card ring-1 ring-line">
+      <img src="{{ article_image(article) }}" alt="" class="h-36 w-full object-cover" />
+      <div class="p-3">
+        {% if article.is_rumor %}<span class="rumor-badge">Rumor</span>{% endif %}
+        <h3 class="mt-2 text-sm">{{ article.title }}</h3>
+        <p class="mt-1 text-xs text-zinc-400">{{ article.source }}</p>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
