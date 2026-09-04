@@ -95,6 +95,45 @@ img {
 .league-bundesliga { border-left: 4px solid #d4572a; }
 .league-j1 { border-left: 4px solid #e10600; }
 
+.league-page {
+  position: relative;
+  isolation: isolate;
+}
+
+.league-page__backdrop {
+  position: fixed;
+  inset: 4rem 0 0;
+  z-index: -2;
+  background-image: var(--league-image);
+  background-position: center;
+  background-size: cover;
+  filter: blur(28px) saturate(0.7);
+  opacity: 0.34;
+  transform: scale(1.08);
+}
+
+.league-page::after {
+  position: fixed;
+  inset: 4rem 0 0;
+  z-index: -1;
+  background: rgba(11, 13, 18, 0.72);
+  content: "";
+}
+
+.league-page__panel {
+  background: linear-gradient(120deg, color-mix(in srgb, var(--league-accent) 55%, #151821), rgba(21, 24, 33, 0.92));
+  backdrop-filter: blur(10px);
+}
+
+.league-page__content {
+  position: relative;
+}
+
+.team-crest {
+  flex: 0 0 auto;
+  background: transparent;
+}
+
 body[data-language="en"] [data-lang-ja] {
   display: none;
 }

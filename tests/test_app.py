@@ -46,6 +46,8 @@ def test_sample_football_and_pages(tmp_path, monkeypatch):
     league = client.get("/leagues/pl")
     assert league.status_code == 200
     assert "プレミアリーグ" in league.text
+    assert "team-crest" in league.text
+    assert "league-page__backdrop" in league.text
     j1 = client.get("/leagues/j1")
     assert j1.status_code == 200
     insights = client.get("/insights")
