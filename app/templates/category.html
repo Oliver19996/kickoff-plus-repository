@@ -12,9 +12,9 @@
     <div class="p-4">
       {% if article.is_rumor %}<span class="rumor-badge">Rumor · {{ heat_label(article.rumor_heat) }}</span>{% endif %}
       <h2 class="mt-3 font-display text-xl leading-snug" data-lang-en>{{ article.title }}</h2>
-      <h2 class="mt-3 font-display text-xl leading-snug" data-lang-ja>{{ article.ai_summary or article.summary or article.title }}</h2>
+      <h2 class="mt-3 font-display text-xl leading-snug" data-lang-ja>{{ article_japanese(article) }}</h2>
       <p class="mt-2 line-clamp-3 text-sm text-zinc-300" data-lang-en>{{ article.summary }}</p>
-      <p class="mt-2 line-clamp-3 text-sm text-zinc-300" data-lang-ja>{{ article.ai_summary or article.summary }}</p>
+      <p class="mt-2 line-clamp-3 text-sm text-zinc-300" data-lang-ja>{{ article_japanese(article) }}</p>
       <p class="mt-3 text-xs text-zinc-500">{{ article.source }}</p>
     </div>
   </a>

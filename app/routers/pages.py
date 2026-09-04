@@ -39,6 +39,12 @@ def league_placeholder(league_slug: str) -> str:
     return _placeholder(league_slug)
 
 
+def article_japanese(article: Article) -> str:
+    if article.ai_summary.startswith("[JA]"):
+        return article.ai_summary[4:].strip()
+    return "日本語訳を取得中です。"
+
+
 def render(request: Request, name: str, context: dict):
     return templates.TemplateResponse(request, name, context)
 
@@ -83,6 +89,7 @@ def home(request: Request, db: Session = Depends(get_db)):
             "last_ingest": _last_ingest(db),
             "article_image": article_image,
             "article_placeholder": article_placeholder,
+            "article_japanese": article_japanese,
             "league_placeholder": league_placeholder,
         },
     )
@@ -112,6 +119,7 @@ def league_hub(slug: str, request: Request, db: Session = Depends(get_db)):
             "last_ingest": _last_ingest(db),
             "article_image": article_image,
             "article_placeholder": article_placeholder,
+            "article_japanese": article_japanese,
         },
     )
 
@@ -138,6 +146,7 @@ def match_page(match_id: int, request: Request, db: Session = Depends(get_db)):
             "last_ingest": _last_ingest(db),
             "article_image": article_image,
             "article_placeholder": article_placeholder,
+            "article_japanese": article_japanese,
         },
     )
 
@@ -159,6 +168,7 @@ def _category_page(category: str, request: Request, db: Session):
             "last_ingest": _last_ingest(db),
             "article_image": article_image,
             "article_placeholder": article_placeholder,
+            "article_japanese": article_japanese,
         },
     )
 

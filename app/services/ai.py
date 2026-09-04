@@ -2,11 +2,13 @@ from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
 
+from sqlalchemy import or_
+
 from app.config import get_settings
 from app.models import Article, Match, SessionLocal, Standing, WeekendPick
 
 
-def summarize_new_articles(limit: int = 8) -> int:
+def summarize_new_articles(limit: int = 30) -> int:
     settings = get_settings()
     if not settings.openai_api_key:
         return 0
@@ -14,7 +16,7 @@ def summarize_new_articles(limit: int = 8) -> int:
     try:
         rows = (
             db.query(Article)
-            .filter(Article.ai_summary == "")
+            .filter(or_(Article.ai_summary == "", ~Article.ai_summary.startswith("[JA]")))
             .order_by(Article.published_at.desc())
             .limit(limit)
             .all()
@@ -27,8 +29,10 @@ def summarize_new_articles(limit: int = 8) -> int:
         updated = 0
         for article in rows:
             prompt = (
-                "次のサッカー記事の見出しとリードだけを根拠に、日本語で3文以内のダイジェストを書いてください。"
-                "事実を足さず、断定的な噂の補強もしないでください。出典の範囲のみ。\n"
+                "次のサッカー記事を日本語に変換してください。必ず次の形式で出力してください。\n"
+                "1行目: 見出しの日本語訳\n2行目以降: リードの日本語要約（3文以内）\n"
+                "英語を残さず、固有名詞だけ原語表記を許可します。事実を足さず、噂を断定しないでください。"
+                "出力の先頭に必ず [JA] を付けてください。\n"
                 f"見出し: {article.title}\nリード: {article.summary[:600]}"
             )
             try:
@@ -40,7 +44,7 @@ def summarize_new_articles(limit: int = 8) -> int:
                 )
                 text = (response.choices[0].message.content or "").strip()
                 if text:
-                    article.ai_summary = text
+                    article.ai_summary = text if text.startswith("[JA]") else f"[JA] {text}"
                     updated += 1
             except Exception:
                 continue
