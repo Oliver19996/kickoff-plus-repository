@@ -48,6 +48,9 @@ def test_sample_football_and_pages(tmp_path, monkeypatch):
     assert "プレミアリーグ" in league.text
     assert "team-crest" in league.text
     assert "league-page__backdrop" in league.text
+    assert "league-hero__image" in league.text
+    assert "score-divider" in home.text
+    assert "<h2 class=\"mb-4 font-display text-2xl\">速報</h2>" in home.text
     j1 = client.get("/leagues/j1")
     assert j1.status_code == 200
     insights = client.get("/insights")

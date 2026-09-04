@@ -35,7 +35,7 @@
 {% endif %}
 
 <section class="mb-10">
-  <h2 class="mb-4 font-display text-2xl">試合速報</h2>
+  <h2 class="mb-4 font-display text-2xl">速報</h2>
   <div class="flex gap-4 overflow-x-auto pb-2">
     {% for article in by_cat.match %}
     <a href="{{ article.url }}" target="_blank" rel="nofollow noopener" class="min-w-[260px] max-w-[260px] overflow-hidden rounded-2xl bg-card ring-1 ring-line">
@@ -62,8 +62,9 @@
         <img src="{{ match.home_crest or (leagues[match.league_slug].placeholder if match.league_slug in leagues else '/static/img/placeholders/pl.svg') }}" onerror="this.onerror=null;this.src='{{ leagues[match.league_slug].placeholder if match.league_slug in leagues else '/static/img/placeholders/pl.svg' }}'" alt="" class="h-8 w-8 object-contain" />
         <span class="truncate">{{ match.home_team }}</span>
       </span>
-      <span class="match-score flex shrink-0 items-center gap-2 px-3 font-display text-2xl">
+      <span class="match-score grid shrink-0 grid-cols-[2.5rem_1rem_2.5rem] items-center justify-items-center px-3 font-display text-2xl">
         <strong>{{ match.home_score }}</strong>
+        <span class="score-divider" aria-hidden="true"></span>
         <strong>{{ match.away_score }}</strong>
       </span>
       <span class="flex min-w-0 items-center justify-end gap-2 text-right">

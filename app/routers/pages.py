@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+import random
 from sqlalchemy.orm import Session
 import re
 
@@ -8,7 +9,7 @@ from app.db import get_db
 from app.config import get_settings
 from app.leagues import CATEGORY_LABELS, LEAGUES
 from app.models import Article, Match, MetaState, Standing, WeekendPick
-from app.services.classify import heat_label
+from app.services.classify import detect_league, heat_label
 from app.services.ingest import ingest_all
 
 router = APIRouter()
@@ -79,12 +80,12 @@ def home(request: Request, db: Session = Depends(get_db)):
         .limit(40)
         .all()
     )
-    hero = articles[0] if articles else None
     by_cat = {
         "match": [a for a in articles if a.category == "match"][:10],
         "transfer": [a for a in articles if a.category == "transfer"][:8],
         "insight": [a for a in articles if a.category in {"gossip", "niche"}][:10],
     }
+    hero = random.choice(by_cat["match"]) if by_cat["match"] else None
     recent_matches = (
         db.query(Match).filter(Match.status == "FINISHED").order_by(Match.utc_date.desc()).limit(8).all()
     )
@@ -122,9 +123,14 @@ def league_hub(slug: str, request: Request, db: Session = Depends(get_db)):
         db.query(Article)
         .filter(Article.league_slug == slug)
         .order_by(Article.published_at.desc())
-        .limit(16)
+        .limit(50)
         .all()
     )
+    news = [
+        article
+        for article in news
+        if detect_league(article.title, article.summary) in ("world", slug)
+    ][:16]
     return render(
         request,
         "league.html",

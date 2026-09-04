@@ -3,7 +3,9 @@
 {% block content %}
 <div class="league-page" style="--league-image: url('{{ league.placeholder }}');">
 <div class="league-page__backdrop"></div>
-<section class="league-page__panel mb-8 overflow-hidden rounded-3xl" style="--league-accent: {{ league.accent }};">
+<section class="league-page__panel league-hero mb-8 overflow-hidden rounded-3xl" style="--league-accent: {{ league.accent }};">
+  <img src="{{ league.placeholder }}" alt="{{ league.name }}" class="league-hero__image" />
+  <div class="league-hero__shade"></div>
   <div class="flex min-h-[220px] items-end p-8">
     <div>
       <p class="text-xs uppercase tracking-[0.25em]">{{ league.region }}</p>
