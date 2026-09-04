@@ -3,7 +3,7 @@
 {% block content %}
 {% if hero %}
 <section class="hero relative mb-10 overflow-hidden rounded-3xl">
-  <img src="{{ article_image(hero) }}" alt="" class="h-[420px] w-full object-cover" />
+  <img src="{{ article_image(hero) }}" onerror="this.onerror=null;this.src='{{ article_placeholder(hero) }}'" alt="" class="h-[420px] w-full object-cover" />
   <div class="hero-overlay absolute inset-0"></div>
   <div class="absolute bottom-0 left-0 max-w-3xl p-8">
     <p class="mb-2 text-xs uppercase tracking-[0.2em] text-amber-300">{{ category_labels.get(hero.category, hero.category) }}{% if hero.is_rumor %} · Rumor{% endif %}</p>
@@ -37,7 +37,7 @@
   <div class="flex gap-4 overflow-x-auto pb-2">
     {% for article in by_cat.match %}
     <a href="{{ article.url }}" target="_blank" rel="nofollow noopener" class="min-w-[260px] max-w-[260px] overflow-hidden rounded-2xl bg-card ring-1 ring-line">
-      <img src="{{ article_image(article) }}" alt="" class="h-40 w-full object-cover" />
+      <img src="{{ article_image(article) }}" onerror="this.onerror=null;this.src='{{ article_placeholder(article) }}'" alt="" class="h-40 w-full object-cover" />
       <div class="p-3">
         <p class="line-clamp-3 text-sm">{{ article.title }}</p>
       </div>
@@ -62,16 +62,16 @@
 </section>
 
 <div class="grid gap-8 md:grid-cols-3">
-  {% for key, label in [("transfer", "大型移籍"), ("gossip", "ゴシップ"), ("niche", "ニッチ深掘り")] %}
+  {% for key, label in [("transfer", "大型移籍"), ("insight", "INSIDE EDGE")] %}
   <section>
     <div class="mb-3 flex items-baseline justify-between">
       <h2 class="font-display text-2xl">{{ label }}</h2>
-      <a class="text-xs text-amber-200" href="/{{ 'transfers' if key == 'transfer' else ('gossip' if key == 'gossip' else 'deep-dives') }}">一覧</a>
+      <a class="text-xs text-amber-200" href="/{{ 'transfers' if key == 'transfer' else 'insights' }}">一覧</a>
     </div>
     <div class="space-y-4">
       {% for article in by_cat[key] %}
       <a href="{{ article.url }}" target="_blank" rel="nofollow noopener" class="block overflow-hidden rounded-2xl bg-card ring-1 ring-line">
-        <img src="{{ article_image(article) }}" alt="" class="h-36 w-full object-cover" />
+        <img src="{{ article_image(article) }}" onerror="this.onerror=null;this.src='{{ article_placeholder(article) }}'" alt="" class="h-36 w-full object-cover" />
         <div class="p-3">
           {% if article.is_rumor %}<span class="rumor-badge">Rumor · {{ heat_label(article.rumor_heat) }}</span>{% endif %}
           <h3 class="mt-2 text-sm leading-snug">{{ article.title }}</h3>

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
+from html.parser import HTMLParser
 from time import mktime
 
 import feedparser
@@ -83,6 +84,8 @@ def _ingest_one(db, feed: dict) -> int:
             continue
         summary = _plain(entry.get("summary") or entry.get("description") or "")
         category, is_rumor = classify_article(title, summary)
+        if category == "other":
+            continue
         league = detect_league(title, summary)
         if league == "world" and feed.get("league") != "world":
             league = feed["league"]
@@ -125,7 +128,27 @@ def _image(entry: dict) -> str:
         href = entry.enclosures[0].get("href")
         if href:
             return href
+    for field in ("summary", "description", "content"):
+        value = entry.get(field) or ""
+        values = value if isinstance(value, list) else [value]
+        for item in values:
+            html = item.get("value", "") if isinstance(item, dict) else item
+            parser = _ImageParser()
+            parser.feed(html)
+            if parser.url:
+                return parser.url
     return ""
+
+
+class _ImageParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__()
+        self.url = ""
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag != "img" or self.url:
+            return
+        self.url = dict(attrs).get("src") or ""
 
 
 def _published(entry: dict) -> datetime | None:

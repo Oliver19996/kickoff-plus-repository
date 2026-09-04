@@ -40,7 +40,8 @@ LEAGUES = {
 CATEGORY_LABELS = {
     "match": "試合速報",
     "transfer": "移籍",
-    "gossip": "ゴシップ",
-    "niche": "深掘り",
+    "gossip": "INSIDE EDGE",
+    "niche": "INSIDE EDGE",
+    "insight": "INSIDE EDGE",
     "other": "ニュース",
 }

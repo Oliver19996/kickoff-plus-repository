@@ -31,6 +31,10 @@ def article_image(article: Article) -> str:
     return article.image_url or _placeholder(article.league_slug)
 
 
+def article_placeholder(article: Article) -> str:
+    return _placeholder(article.league_slug)
+
+
 def render(request: Request, name: str, context: dict):
     return templates.TemplateResponse(request, name, context)
 
@@ -42,13 +46,18 @@ def home(request: Request, db: Session = Depends(get_db)):
             ingest_all()
         except Exception:
             pass
-    articles = db.query(Article).order_by(Article.published_at.desc()).limit(40).all()
+    articles = (
+        db.query(Article)
+        .filter(Article.category != "other")
+        .order_by(Article.published_at.desc())
+        .limit(40)
+        .all()
+    )
     hero = articles[0] if articles else None
     by_cat = {
         "match": [a for a in articles if a.category == "match"][:10],
         "transfer": [a for a in articles if a.category == "transfer"][:8],
-        "gossip": [a for a in articles if a.category == "gossip"][:8],
-        "niche": [a for a in articles if a.category == "niche"][:8],
+        "insight": [a for a in articles if a.category in {"gossip", "niche"}][:10],
     }
     recent_matches = (
         db.query(Match).filter(Match.status == "FINISHED").order_by(Match.utc_date.desc()).limit(8).all()
@@ -69,6 +78,7 @@ def home(request: Request, db: Session = Depends(get_db)):
             "pick_matches": pick_matches,
             "last_ingest": _last_ingest(db),
             "article_image": article_image,
+            "article_placeholder": article_placeholder,
         },
     )
 
@@ -96,6 +106,7 @@ def league_hub(slug: str, request: Request, db: Session = Depends(get_db)):
             "news": news,
             "last_ingest": _last_ingest(db),
             "article_image": article_image,
+            "article_placeholder": article_placeholder,
         },
     )
 
@@ -121,18 +132,18 @@ def match_page(match_id: int, request: Request, db: Session = Depends(get_db)):
             "related": related,
             "last_ingest": _last_ingest(db),
             "article_image": article_image,
+            "article_placeholder": article_placeholder,
         },
     )
 
 
 def _category_page(category: str, request: Request, db: Session):
-    rows = (
-        db.query(Article)
-        .filter(Article.category == category)
-        .order_by(Article.published_at.desc())
-        .limit(30)
-        .all()
-    )
+    query = db.query(Article)
+    if category == "insight":
+        query = query.filter(Article.category.in_(["gossip", "niche"]))
+    else:
+        query = query.filter(Article.category == category)
+    rows = query.order_by(Article.published_at.desc()).limit(30).all()
     return render(
         request,
         "category.html",
@@ -142,6 +153,7 @@ def _category_page(category: str, request: Request, db: Session):
             "articles": rows,
             "last_ingest": _last_ingest(db),
             "article_image": article_image,
+            "article_placeholder": article_placeholder,
         },
     )
 
@@ -159,3 +171,8 @@ def gossip(request: Request, db: Session = Depends(get_db)):
 @router.get("/deep-dives", response_class=HTMLResponse)
 def deep_dives(request: Request, db: Session = Depends(get_db)):
     return _category_page("niche", request, db)
+
+
+@router.get("/insights", response_class=HTMLResponse)
+def insights(request: Request, db: Session = Depends(get_db)):
+    return _category_page("insight", request, db)

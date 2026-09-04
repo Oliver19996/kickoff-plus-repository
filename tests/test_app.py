@@ -43,6 +43,9 @@ def test_sample_football_and_pages(tmp_path, monkeypatch):
     assert "プレミアリーグ" in league.text
     j1 = client.get("/leagues/j1")
     assert j1.status_code == 200
+    insights = client.get("/insights")
+    assert insights.status_code == 200
+    assert "INSIDE EDGE" in insights.text
     match = client.get("/matches/401001")
     assert match.status_code == 200
     health = client.get("/api/health")

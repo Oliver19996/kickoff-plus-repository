@@ -8,7 +8,7 @@
 <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
   {% for article in articles %}
   <a href="{{ article.url }}" target="_blank" rel="nofollow noopener" class="overflow-hidden rounded-3xl bg-card ring-1 ring-line">
-    <img src="{{ article_image(article) }}" alt="" class="h-52 w-full object-cover" />
+    <img src="{{ article_image(article) }}" onerror="this.onerror=null;this.src='{{ article_placeholder(article) }}'" alt="" class="h-52 w-full object-cover" />
     <div class="p-4">
       {% if article.is_rumor %}<span class="rumor-badge">Rumor · {{ heat_label(article.rumor_heat) }}</span>{% endif %}
       <h2 class="mt-3 font-display text-xl leading-snug">{{ article.title }}</h2>
