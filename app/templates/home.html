@@ -20,7 +20,9 @@
   <div class="grid gap-4 md:grid-cols-3">
     {% for pick, match in pick_matches %}
     <a href="/matches/{{ match.id }}" class="block overflow-hidden rounded-2xl bg-card ring-1 ring-line">
-      <div class="h-32 bg-gradient-to-br from-indigo-700 to-slate-900"></div>
+      <div class="flex h-32 items-center justify-center bg-gradient-to-br from-indigo-700 to-slate-900">
+        <img src="{{ leagues[match.league_slug].placeholder if match.league_slug in leagues else '/static/img/placeholders/pl.svg' }}" alt="" class="h-20 w-20 object-contain" />
+      </div>
       <div class="p-4">
         <p class="text-sm text-zinc-400">{{ leagues[match.league_slug].name if match.league_slug in leagues else match.league_slug }}</p>
         <h3 class="mt-1 text-lg">{{ match.home_team }} vs {{ match.away_team }}</h3>
@@ -53,9 +55,19 @@
   <div class="grid gap-3 md:grid-cols-2">
     {% for match in recent_matches %}
     <a href="/matches/{{ match.id }}" class="flex items-center justify-between rounded-2xl bg-card px-4 py-5 ring-1 ring-line">
-      <span>{{ match.home_team }}</span>
-      <span class="font-display text-2xl">{{ match.home_score }} — {{ match.away_score }}</span>
-      <span>{{ match.away_team }}</span>
+      <span class="flex min-w-0 items-center gap-2">
+        <img src="{{ match.home_crest or (leagues[match.league_slug].placeholder if match.league_slug in leagues else '/static/img/placeholders/pl.svg') }}" onerror="this.onerror=null;this.src='{{ leagues[match.league_slug].placeholder if match.league_slug in leagues else '/static/img/placeholders/pl.svg' }}'" alt="" class="h-8 w-8 object-contain" />
+        <span class="truncate">{{ match.home_team }}</span>
+      </span>
+      <span class="match-score flex shrink-0 items-center gap-2 px-3 font-display text-2xl">
+        <strong>{{ match.home_score }}</strong>
+        <img src="{{ leagues[match.league_slug].placeholder if match.league_slug in leagues else '/static/img/placeholders/pl.svg' }}" alt="{{ leagues[match.league_slug].short if match.league_slug in leagues else 'League' }}" class="h-7 w-7 object-contain" />
+        <strong>{{ match.away_score }}</strong>
+      </span>
+      <span class="flex min-w-0 items-center justify-end gap-2 text-right">
+        <span class="truncate">{{ match.away_team }}</span>
+        <img src="{{ match.away_crest or (leagues[match.league_slug].placeholder if match.league_slug in leagues else '/static/img/placeholders/pl.svg') }}" onerror="this.onerror=null;this.src='{{ leagues[match.league_slug].placeholder if match.league_slug in leagues else '/static/img/placeholders/pl.svg' }}'" alt="" class="h-8 w-8 object-contain" />
+      </span>
     </a>
     {% endfor %}
   </div>

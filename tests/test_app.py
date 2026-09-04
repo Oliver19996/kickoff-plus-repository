@@ -38,6 +38,8 @@ def test_sample_football_and_pages(tmp_path, monkeypatch):
     home = client.get("/")
     assert home.status_code == 200
     assert "Kickoff Pulse" in home.text
+    assert "home_crest" not in home.text
+    assert "今週末のおすすめ" in home.text
     league = client.get("/leagues/pl")
     assert league.status_code == 200
     assert "プレミアリーグ" in league.text

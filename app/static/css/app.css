@@ -30,3 +30,7 @@ a:hover {
 img {
   background: #1b2030;
 }
+
+.match-score img {
+  background: transparent;
+}
