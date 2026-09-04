@@ -7,8 +7,10 @@
   <div class="hero-overlay absolute inset-0"></div>
   <div class="absolute bottom-0 left-0 max-w-3xl p-8">
     <p class="mb-2 text-xs uppercase tracking-[0.2em] text-amber-300">{{ category_labels.get(hero.category, hero.category) }}{% if hero.is_rumor %} · Rumor{% endif %}</p>
-    <h1 class="font-display text-4xl leading-tight md:text-5xl">{{ hero.title }}</h1>
-    <p class="mt-3 text-zinc-200">{{ hero.ai_summary or hero.summary }}</p>
+    <h1 class="font-display text-4xl leading-tight md:text-5xl" data-lang-en>{{ hero.title }}</h1>
+    <h1 class="font-display text-4xl leading-tight md:text-5xl" data-lang-ja>{{ hero.ai_summary or hero.summary or hero.title }}</h1>
+    <p class="mt-3 text-zinc-200" data-lang-en>{{ hero.summary }}</p>
+    <p class="mt-3 text-zinc-200" data-lang-ja>{{ hero.ai_summary or hero.summary }}</p>
     <a class="mt-4 inline-block text-sm text-amber-200 underline" href="{{ hero.url }}" rel="nofollow noopener" target="_blank">出典: {{ hero.source }}</a>
   </div>
 </section>
@@ -19,11 +21,9 @@
   <h2 class="mb-4 font-display text-2xl">今週末のおすすめ</h2>
   <div class="grid gap-4 md:grid-cols-3">
     {% for pick, match in pick_matches %}
-    <a href="/matches/{{ match.id }}" class="block overflow-hidden rounded-2xl bg-card ring-1 ring-line">
-      <div class="flex h-32 items-center justify-center bg-gradient-to-br from-indigo-700 to-slate-900">
-        <img src="{{ leagues[match.league_slug].placeholder if match.league_slug in leagues else '/static/img/placeholders/pl.svg' }}" alt="" class="h-20 w-20 object-contain" />
-      </div>
-      <div class="p-4">
+    <a href="/matches/{{ match.id }}" class="league-surface block overflow-hidden rounded-2xl bg-card ring-1 ring-line" style="--league-image: url('{{ leagues[match.league_slug].placeholder if match.league_slug in leagues else '/static/img/placeholders/pl.svg' }}');">
+      <div class="league-surface__image h-32"></div>
+      <div class="league-surface__content p-4">
         <p class="text-sm text-zinc-400">{{ leagues[match.league_slug].name if match.league_slug in leagues else match.league_slug }}</p>
         <h3 class="mt-1 text-lg">{{ match.home_team }} vs {{ match.away_team }}</h3>
         <p class="mt-2 text-sm text-zinc-300">{{ pick.blurb }}</p>
@@ -41,7 +41,8 @@
     <a href="{{ article.url }}" target="_blank" rel="nofollow noopener" class="min-w-[260px] max-w-[260px] overflow-hidden rounded-2xl bg-card ring-1 ring-line">
       <img src="{{ article_image(article) }}" onerror="this.onerror=null;this.src='{{ article_placeholder(article) }}'" alt="" class="h-40 w-full object-cover" />
       <div class="p-3">
-        <p class="line-clamp-3 text-sm">{{ article.title }}</p>
+        <p class="line-clamp-3 text-sm" data-lang-en>{{ article.title }}</p>
+        <p class="line-clamp-3 text-sm" data-lang-ja>{{ article.ai_summary or article.summary or article.title }}</p>
       </div>
     </a>
     {% else %}
@@ -54,7 +55,9 @@
   <h2 class="mb-4 font-display text-2xl">直近の結果</h2>
   <div class="grid gap-3 md:grid-cols-2">
     {% for match in recent_matches %}
-    <a href="/matches/{{ match.id }}" class="flex items-center justify-between rounded-2xl bg-card px-4 py-5 ring-1 ring-line">
+    <a href="/matches/{{ match.id }}" class="league-surface flex items-center justify-between overflow-hidden rounded-2xl bg-card px-4 py-5 ring-1 ring-line" style="--league-image: url('{{ leagues[match.league_slug].placeholder if match.league_slug in leagues else '/static/img/placeholders/pl.svg' }}');">
+      <span class="league-surface__image absolute inset-0"></span>
+      <span class="league-surface__content relative flex w-full items-center justify-between">
       <span class="flex min-w-0 items-center gap-2">
         <img src="{{ match.home_crest or (leagues[match.league_slug].placeholder if match.league_slug in leagues else '/static/img/placeholders/pl.svg') }}" onerror="this.onerror=null;this.src='{{ leagues[match.league_slug].placeholder if match.league_slug in leagues else '/static/img/placeholders/pl.svg' }}'" alt="" class="h-8 w-8 object-contain" />
         <span class="truncate">{{ match.home_team }}</span>
@@ -67,6 +70,7 @@
       <span class="flex min-w-0 items-center justify-end gap-2 text-right">
         <span class="truncate">{{ match.away_team }}</span>
         <img src="{{ match.away_crest or (leagues[match.league_slug].placeholder if match.league_slug in leagues else '/static/img/placeholders/pl.svg') }}" onerror="this.onerror=null;this.src='{{ leagues[match.league_slug].placeholder if match.league_slug in leagues else '/static/img/placeholders/pl.svg' }}'" alt="" class="h-8 w-8 object-contain" />
+      </span>
       </span>
     </a>
     {% endfor %}
@@ -86,7 +90,8 @@
         <img src="{{ article_image(article) }}" onerror="this.onerror=null;this.src='{{ article_placeholder(article) }}'" alt="" class="h-36 w-full object-cover" />
         <div class="p-3">
           {% if article.is_rumor %}<span class="rumor-badge">Rumor · {{ heat_label(article.rumor_heat) }}</span>{% endif %}
-          <h3 class="mt-2 text-sm leading-snug">{{ article.title }}</h3>
+          <h3 class="mt-2 text-sm leading-snug" data-lang-en>{{ article.title }}</h3>
+          <h3 class="mt-2 text-sm leading-snug" data-lang-ja>{{ article.ai_summary or article.summary or article.title }}</h3>
           <p class="mt-1 text-xs text-zinc-400">{{ article.source }}</p>
         </div>
       </a>

@@ -36,16 +36,42 @@
         <a href="/transfers">移籍</a>
         <a href="/insights">INSIDE EDGE</a>
       </nav>
+      <div class="language-switch" role="group" aria-label="Language">
+        <button type="button" data-language="ja" class="language-button is-active">日本語</button>
+        <button type="button" data-language="en" class="language-button">EN</button>
+      </div>
     </div>
   </header>
   <main class="mx-auto max-w-7xl px-4 py-6">
     {% block content %}{% endblock %}
   </main>
+  <aside class="x-dock" aria-label="X football feed">
+    <div class="x-dock__mark">X</div>
+    <div>
+      <p class="text-xs uppercase tracking-[0.18em] text-zinc-400">Football pulse</p>
+      <h2 class="mt-1 font-display text-lg">Xで追う</h2>
+      <p class="mt-2 text-xs text-zinc-400">ログインして、あなたのXホームでサッカーの話題を確認。</p>
+      <a class="x-login" href="https://x.com/i/flow/login" target="_blank" rel="noopener">Xにログイン</a>
+    </div>
+  </aside>
   <footer class="border-t border-line px-4 py-8 text-xs text-zinc-500">
     <div class="mx-auto max-w-7xl space-y-2">
       <p>最終更新: {{ last_ingest }} ・ 15分ごとのダイジェスト（ライブスコアではありません）</p>
       <p>記事は見出し・要約・出典リンクのみ。本文の転載はしません。ゴシップは Rumor ラベル付きです。</p>
     </div>
   </footer>
+  <script>
+    (() => {
+      const buttons = document.querySelectorAll("[data-language]");
+      const setLanguage = (language) => {
+        document.documentElement.lang = language;
+        document.body.dataset.language = language;
+        buttons.forEach((button) => button.classList.toggle("is-active", button.dataset.language === language));
+        localStorage.setItem("kickoff-language", language);
+      };
+      buttons.forEach((button) => button.addEventListener("click", () => setLanguage(button.dataset.language)));
+      setLanguage(localStorage.getItem("kickoff-language") || "ja");
+    })();
+  </script>
 </body>
 </html>

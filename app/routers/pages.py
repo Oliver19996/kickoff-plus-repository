@@ -35,6 +35,10 @@ def article_placeholder(article: Article) -> str:
     return _placeholder(article.league_slug)
 
 
+def league_placeholder(league_slug: str) -> str:
+    return _placeholder(league_slug)
+
+
 def render(request: Request, name: str, context: dict):
     return templates.TemplateResponse(request, name, context)
 
@@ -79,6 +83,7 @@ def home(request: Request, db: Session = Depends(get_db)):
             "last_ingest": _last_ingest(db),
             "article_image": article_image,
             "article_placeholder": article_placeholder,
+            "league_placeholder": league_placeholder,
         },
     )
 
