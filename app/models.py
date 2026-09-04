@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Optional
 
 from sqlalchemy import DateTime, Float, Integer, String, Text, create_engine
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker
@@ -45,9 +44,9 @@ class Match(Base):
     away_team: Mapped[str] = mapped_column(String(128))
     home_crest: Mapped[str] = mapped_column(String(512), default="")
     away_crest: Mapped[str] = mapped_column(String(512), default="")
-    home_score: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
-    away_score: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
-    matchday: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    home_score: Mapped[int] = mapped_column(Integer, nullable=True)
+    away_score: Mapped[int] = mapped_column(Integer, nullable=True)
+    matchday: Mapped[int] = mapped_column(Integer, nullable=True)
     highlight: Mapped[str] = mapped_column(Text, default="")
 
 
@@ -58,7 +57,7 @@ class Article(Base):
     url: Mapped[str] = mapped_column(String(768), unique=True)
     title: Mapped[str] = mapped_column(String(512))
     source: Mapped[str] = mapped_column(String(128), default="")
-    published_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
+    published_at: Mapped[datetime] = mapped_column(DateTime, nullable=True)
     summary: Mapped[str] = mapped_column(Text, default="")
     ai_summary: Mapped[str] = mapped_column(Text, default="")
     image_url: Mapped[str] = mapped_column(String(768), default="")
