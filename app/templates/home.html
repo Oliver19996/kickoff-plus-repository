@@ -3,14 +3,14 @@
 {% block content %}
 {% if hero %}
 <section class="hero relative mb-10 overflow-hidden rounded-3xl">
-  <img src="{{ article_image(hero) }}" onerror="this.onerror=null;this.src='{{ article_placeholder(hero) }}'" alt="" class="h-[420px] w-full object-cover" />
+  {% if article_has_image(hero) %}<img src="{{ article_image(hero) }}" onerror="this.onerror=null;this.src='{{ article_placeholder(hero) }}'" alt="" class="h-[420px] w-full object-cover" />{% else %}<iframe src="{{ hero.url }}" title="{{ hero.title }}" loading="lazy" class="article-preview h-[420px] w-full"></iframe>{% endif %}
   <div class="hero-overlay absolute inset-0"></div>
   <div class="absolute bottom-0 left-0 max-w-3xl p-8">
     <p class="mb-2 text-xs uppercase tracking-[0.2em] text-amber-300">{{ category_labels.get(hero.category, hero.category) }}{% if hero.is_rumor %} · Rumor{% endif %}</p>
     <h1 class="font-display text-4xl leading-tight md:text-5xl" data-lang-en>{{ hero.title }}</h1>
-    <h1 class="font-display text-4xl leading-tight md:text-5xl" data-lang-ja>{{ article_japanese(hero) }}</h1>
+    <h1 class="font-display text-4xl leading-tight md:text-5xl" data-lang-ja>{{ article_japanese(hero, "heading") }}</h1>
     <p class="mt-3 text-zinc-200" data-lang-en>{{ hero.summary }}</p>
-    <p class="mt-3 text-zinc-200" data-lang-ja>{{ article_japanese(hero) }}</p>
+    <p class="mt-3 text-zinc-200" data-lang-ja>{{ article_japanese(hero, "summary") }}</p>
     <a class="mt-4 inline-block text-sm text-amber-200 underline" href="{{ hero.url }}" rel="nofollow noopener" target="_blank">出典: {{ hero.source }}</a>
   </div>
 </section>
@@ -39,10 +39,10 @@
   <div class="flex gap-4 overflow-x-auto pb-2">
     {% for article in by_cat.match %}
     <a href="{{ article.url }}" target="_blank" rel="nofollow noopener" class="min-w-[260px] max-w-[260px] overflow-hidden rounded-2xl bg-card ring-1 ring-line">
-      <img src="{{ article_image(article) }}" onerror="this.onerror=null;this.src='{{ article_placeholder(article) }}'" alt="" class="h-40 w-full object-cover" />
+      {% if article_has_image(article) %}<img src="{{ article_image(article) }}" onerror="this.onerror=null;this.src='{{ article_placeholder(article) }}'" alt="" class="h-40 w-full object-cover" />{% else %}<iframe src="{{ article.url }}" title="{{ article.title }}" loading="lazy" class="article-preview h-40 w-full"></iframe>{% endif %}
       <div class="p-3">
         <p class="line-clamp-3 text-sm" data-lang-en>{{ article.title }}</p>
-        <p class="line-clamp-3 text-sm" data-lang-ja>{{ article_japanese(article) }}</p>
+        <p class="line-clamp-3 text-sm" data-lang-ja>{{ article_japanese(article, "heading") }}</p>
       </div>
     </a>
     {% else %}
@@ -86,11 +86,11 @@
     <div class="space-y-4">
       {% for article in by_cat[key] %}
       <a href="{{ article.url }}" target="_blank" rel="nofollow noopener" class="block overflow-hidden rounded-2xl bg-card ring-1 ring-line">
-        <img src="{{ article_image(article) }}" onerror="this.onerror=null;this.src='{{ article_placeholder(article) }}'" alt="" class="h-36 w-full object-cover" />
+        {% if article_has_image(article) %}<img src="{{ article_image(article) }}" onerror="this.onerror=null;this.src='{{ article_placeholder(article) }}'" alt="" class="h-36 w-full object-cover" />{% else %}<iframe src="{{ article.url }}" title="{{ article.title }}" loading="lazy" class="article-preview h-36 w-full"></iframe>{% endif %}
         <div class="p-3">
           {% if article.is_rumor %}<span class="rumor-badge">Rumor · {{ heat_label(article.rumor_heat) }}</span>{% endif %}
           <h3 class="mt-2 text-sm leading-snug" data-lang-en>{{ article.title }}</h3>
-          <h3 class="mt-2 text-sm leading-snug" data-lang-ja>{{ article_japanese(article) }}</h3>
+          <h3 class="mt-2 text-sm leading-snug" data-lang-ja>{{ article_japanese(article, "heading") }}</h3>
           <p class="mt-1 text-xs text-zinc-400">{{ article.source }}</p>
         </div>
       </a>

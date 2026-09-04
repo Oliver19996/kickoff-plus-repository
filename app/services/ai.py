@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
+import re
 
 from sqlalchemy import or_
 
@@ -14,13 +15,14 @@ def summarize_new_articles(limit: int = 30) -> int:
         return 0
     db = SessionLocal()
     try:
-        rows = (
+        candidates = (
             db.query(Article)
             .filter(or_(Article.ai_summary == "", ~Article.ai_summary.startswith("[JA]")))
             .order_by(Article.published_at.desc())
-            .limit(limit)
+            .limit(limit * 4)
             .all()
         )
+        rows = [article for article in candidates if not _is_japanese(article.title)][:limit]
         if not rows:
             return 0
         from openai import OpenAI
@@ -97,6 +99,12 @@ def refresh_weekend_picks() -> None:
         db.commit()
     finally:
         db.close()
+
+
+def _is_japanese(title: str) -> bool:
+    japanese = len(re.findall(r"[ぁ-んァ-ン一-龥々ー]", title))
+    latin = len(re.findall(r"[A-Za-z]", title))
+    return japanese >= 2 and japanese >= latin
 
 
 def _fallback_blurb(match: Match, home_pos: int, away_pos: int) -> str:
