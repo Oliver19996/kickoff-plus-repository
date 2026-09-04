@@ -45,6 +45,29 @@ MATCH_WORDS = (
     "引き分け",
     "得点",
 )
+FOOTBALL_WORDS = (
+    "football",
+    "soccer",
+    "premier league",
+    "la liga",
+    "laliga",
+    "bundesliga",
+    "j-league",
+    "jリーグ",
+    "epl",
+    "プレミア",
+    "リーガ",
+    "ブンデス",
+    "サッカー",
+    "arsenal",
+    "liverpool",
+    "chelsea",
+    "tottenham",
+    "barcelona",
+    "real madrid",
+    "bayern",
+    "dortmund",
+)
 NICHE_WORDS = (
     "tactical",
     "tactics",
@@ -79,6 +102,11 @@ def classify_article(title: str, summary: str = "") -> tuple[str, bool]:
     if any(word.lower() in text for word in MATCH_WORDS):
         return "match", False
     return "other", False
+
+
+def is_football_article(title: str, summary: str = "") -> bool:
+    text = f"{title} {summary}".lower()
+    return any(word.lower() in text for word in FOOTBALL_WORDS)
 
 
 def detect_league(title: str, summary: str = "") -> str:

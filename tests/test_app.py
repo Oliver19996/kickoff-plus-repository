@@ -4,7 +4,7 @@ from types import SimpleNamespace
 from fastapi.testclient import TestClient
 
 from app.db import ensure_db
-from app.services.classify import classify_article, heat_label, rumor_heat
+from app.services.classify import classify_article, heat_label, is_football_article, rumor_heat
 from app.services.football import upsert_european_leagues
 from app.services.ingest import ingest_all
 
@@ -14,6 +14,8 @@ def test_classify_categories():
     assert classify_article("選手の熱愛スキャンダルの噂")[0] == "gossip"
     assert classify_article("戦術特集: プレスの分析")[0] == "niche"
     assert classify_article("試合速報 2-1 勝利")[0] == "match"
+    assert is_football_article("Arsenal win Premier League match")
+    assert not is_football_article("Formula 1 driver wins Monaco podium")
 
 
 def test_rumor_heat_and_label():

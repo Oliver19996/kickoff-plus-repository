@@ -9,7 +9,7 @@ import feedparser
 import httpx
 
 from app.models import Article, FeedState, SessionLocal
-from app.services.classify import classify_article, detect_league, rumor_heat
+from app.services.classify import classify_article, detect_league, is_football_article, rumor_heat
 
 FEEDS = [
     {
@@ -79,6 +79,8 @@ def _ingest_one(db, feed: dict) -> int:
         url = entry.get("link") or ""
         title = (entry.get("title") or "").strip()
         if not url or not title:
+            continue
+        if not is_football_article(title, entry.get("summary") or entry.get("description") or ""):
             continue
         if db.query(Article).filter(Article.url == url).first():
             continue

@@ -33,7 +33,7 @@
           <td>
             <span class="flex items-center gap-2">
               {% if row.team_crest %}
-              <img src="{{ row.team_crest }}" alt="" class="team-crest h-7 w-7 object-contain" onerror="this.style.display='none'" />
+              <img src="{{ row.team_crest or league.placeholder }}" alt="{{ row.team_name }}" loading="lazy" decoding="async" referrerpolicy="no-referrer" class="team-crest h-7 w-7 object-contain" onerror="this.onerror=null;this.src='{{ league.placeholder }}'" />
               {% endif %}
               <span>{{ row.team_name }}</span>
             </span>
@@ -55,11 +55,11 @@
       {% for match in matches %}
       <a href="/matches/{{ match.id }}" class="league-{{ league.slug }} rounded-2xl bg-card p-4 ring-1 ring-line">
         <p class="text-xs text-zinc-400">{{ match.utc_date[:10] }} · {{ match.status }}</p>
-        <p class="mt-2 flex items-center gap-2"><img src="{{ match.home_crest or league.placeholder }}" alt="" class="team-crest h-8 w-8 object-contain" onerror="this.src='{{ league.placeholder }}'" />{{ match.home_team }}</p>
+        <p class="mt-2 flex items-center gap-2"><img src="{{ match.home_crest or league.placeholder }}" alt="{{ match.home_team }}" loading="lazy" decoding="async" referrerpolicy="no-referrer" class="team-crest h-8 w-8 object-contain" onerror="this.onerror=null;this.src='{{ league.placeholder }}'" />{{ match.home_team }}</p>
         <p class="flex items-center gap-3 font-display text-2xl">
           {% if match.home_score is not none %}{{ match.home_score }} — {{ match.away_score }}{% else %}vs{% endif %}
         </p>
-        <p class="flex items-center justify-end gap-2 text-right"><span>{{ match.away_team }}</span><img src="{{ match.away_crest or league.placeholder }}" alt="" class="team-crest h-8 w-8 object-contain" onerror="this.src='{{ league.placeholder }}'" /></p>
+        <p class="flex items-center justify-end gap-2 text-right"><span>{{ match.away_team }}</span><img src="{{ match.away_crest or league.placeholder }}" alt="{{ match.away_team }}" loading="lazy" decoding="async" referrerpolicy="no-referrer" class="team-crest h-8 w-8 object-contain" onerror="this.onerror=null;this.src='{{ league.placeholder }}'" /></p>
       </a>
       {% else %}
       <p class="text-zinc-500">試合データはまだありません。</p>
@@ -73,7 +73,7 @@
   <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
     {% for article in news %}
     <a href="{{ article.url }}" target="_blank" rel="nofollow noopener" class="overflow-hidden rounded-2xl bg-card ring-1 ring-line">
-      <img src="{{ article_image(article) }}" onerror="this.onerror=null;this.src='{{ article_placeholder(article) }}'" alt="" class="h-36 w-full object-cover" />
+      <img src="{{ article_image(article) or article_placeholder(article) }}" onerror="this.onerror=null;this.src='{{ article_placeholder(article) }}'" alt="" loading="lazy" decoding="async" class="h-36 w-full object-cover" />
       <div class="p-3">
         {% if article.is_rumor %}<span class="rumor-badge">Rumor</span>{% endif %}
         <h3 class="mt-2 text-sm">{{ article.title }}</h3>

@@ -129,7 +129,7 @@ def league_hub(slug: str, request: Request, db: Session = Depends(get_db)):
     news = [
         article
         for article in news
-        if detect_league(article.title, article.summary) in ("world", slug)
+        if detect_league(article.title, article.summary) == slug
     ][:16]
     return render(
         request,
